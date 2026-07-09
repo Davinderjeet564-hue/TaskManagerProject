@@ -1,0 +1,22 @@
+import React, { useState } from 'react'
+
+function InputField({addTask}) {
+  const [inputValue, setInputValue] = useState<string>('')
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    setInputValue(e.target.value)
+  }
+
+  return (
+    <div className="flex flex-row justify-center items-center gap-5 mt-4">
+        <input type="text" id="taskInput" placeholder='Enter Task Name' value={inputValue} onChange={handleChange} className='border border-gray-300 rounded-md w-lg p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none'/>
+        <button type="submit" onClick={()=>{
+          if (inputValue.trim() === '') return;
+          addTask(inputValue)
+          setInputValue('')
+          }} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer transition-colors focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none'>Add Task</button>
+    </div>
+  )
+}
+
+export default InputField
