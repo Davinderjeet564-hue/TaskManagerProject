@@ -16,7 +16,7 @@ function ShowTask({tasks, editTask, deleteTask, completeTask}: ShowTaskProps) {
       {tasks && tasks.length > 0 && tasks.map((task, index)=>{
         const isEditing = editingId === task.id
         return (
-          <div key={task.id} className='flex flex-row justify-between items-center bg-gray-300 w-md p-5 rounded-4xl'>
+          <div key={task.id} className='flex flex-row justify-between items-center bg-gray-300 dark:bg-gray-800 w-md p-5 rounded-4xl transition-colors duration-300'>
             <input 
               type="checkbox" 
               checked={task.completed} 
@@ -34,7 +34,7 @@ function ShowTask({tasks, editTask, deleteTask, completeTask}: ShowTaskProps) {
                 type="text" 
                 value={task.title} 
                 onChange={(e)=>editTask(task.id, e.target.value)} 
-                className='border border-gray-400 rounded px-2 py-1'
+                className='border border-gray-400 rounded px-2 py-1 dark:bg-gray-700 dark:text-gray-100'
                 disabled={task.completed}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -50,14 +50,14 @@ function ShowTask({tasks, editTask, deleteTask, completeTask}: ShowTaskProps) {
               {isEditing ? (
                 <button 
                   onClick={() => setEditingId(null)} 
-                  className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-3xl cursor-pointer transition-colors focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none'
+                  className='bg-green-500 hover:bg-green-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-3xl cursor-pointer transition-colors focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none'
                 >
                   Save
                 </button>
               ) : (
                 <button 
                   onClick={() => setEditingId(task.id)} 
-                  className='bg-blue-500 rounded-3xl hover:bg-blue-700 text-white font-bold py-2 px-4  cursor-pointer transition-colors focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed'
+                  className='bg-blue-500 rounded-3xl hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4  cursor-pointer transition-colors focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed'
                   disabled={task.completed}
                 >
                   Edit
@@ -65,7 +65,7 @@ function ShowTask({tasks, editTask, deleteTask, completeTask}: ShowTaskProps) {
               )}
               <button 
                 onClick={()=>deleteTask(task.id)} 
-                className='bg-red-500 rounded-3xl hover:bg-red-700 text-white font-bold py-2 px-4 cursor-pointer transition-colors focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none ml-2'
+                className='bg-red-500 rounded-3xl hover:bg-red-700 text-white dark:text-gray-100 font-bold py-2 px-4 cursor-pointer transition-colors focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none ml-2'
               >
                 Delete
               </button>
