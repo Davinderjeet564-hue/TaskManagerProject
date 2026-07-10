@@ -3,3 +3,7 @@
 
 /* Enable class-based dark mode */
 @custom-variant dark (&:where(.dark, .dark *));
+
+@utility autofill-custom {
+  @apply autofill:bg-gray-100 autofill:text-black dark:autofill:bg-gray-800 dark:autofill:text-gray-100;
+}

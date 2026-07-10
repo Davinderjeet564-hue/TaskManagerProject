@@ -11,8 +11,9 @@ function ThemeToggleButton() {
     <button
         className='flex w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 justify-center items-center cursor-pointer'
         onClick={handleToggle}
+        aria-label={`Toggle theme to ${theme === 'light' ? 'dark' : 'light'}`}
     >
-        {theme === 'light' ? '☀️': '🌙'}
+      <span role='img' aria-hidden='true'>{theme === 'light' ? '☀️': '🌙'}</span>
     </button>
   )
 }

@@ -4,14 +4,14 @@ import InputField from './components/InputField'
 import ShowTask from './components/ShowTask'
 import themeContext from './themeContext';
 
-export interface task {
-  id: number,
+export interface Task {
+  id: string,
   title: string,
   completed: boolean,
 }
 
 function App() {
-  const [tasks, setTasks] = useState<task[]>(
+  const [tasks, setTasks] = useState<Task[]>(
     ()=>localStorage.getItem('tasks') ? JSON.parse(localStorage.getItem('tasks') || '[]') : []
   );
 
@@ -34,23 +34,23 @@ function App() {
   }, [theme]);
 
   const addTask = (title: string) =>{
-    const newTask: task = {
-      id: Math.random(), 
+    const newTask: Task = {
+      id: crypto.randomUUID(), 
       title,
       completed: false,
     }
     setTasks(prevTasks => [...prevTasks, newTask]);
   }
 
-  const editTask = (id: number, newTitle: string) => {
+  const editTask = (id: string, newTitle: string) => {
     setTasks(prevTasks => prevTasks.map(task => task.id === id ? { ...task, title: newTitle } : task));
   }
 
-  const deleteTask = (id: number) => {
+  const deleteTask = (id: string) => {
     setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
   }
 
-  const completeTask = (id: number) => {
+  const completeTask = (id: string) => {
     setTasks(prevTasks => prevTasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task));
   }
 
