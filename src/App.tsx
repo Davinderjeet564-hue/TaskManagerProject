@@ -20,7 +20,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
-
   useEffect(() => {
     const root = document.documentElement;
     root.style.transition = 'all 0.3s ease';
@@ -56,7 +55,7 @@ function App() {
 
   return (
     <themeContext.Provider value={{theme, setTheme}}>
-      <div className='flex h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900'>
+      <div className='flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900'>
         <Header />
         <InputField addTask={addTask}/>
         {tasks.length > 0 ? <ShowTask tasks={tasks} editTask={editTask} deleteTask={deleteTask} completeTask={completeTask}/> : (

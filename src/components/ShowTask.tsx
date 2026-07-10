@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import type { Task } from '../App'
 import TaskItem from './TaskItem'
 

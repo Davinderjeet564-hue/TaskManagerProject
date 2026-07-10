@@ -48,7 +48,7 @@ function TaskItem({
         />
       ) : (
         <span
-          className={`pl-4 text-xl font-semibold ${task.completed ? "line-through opacity-50" : ""}`}
+          className={`pl-4 text-xl font-semibold ${task.completed ? "line-through opacity-50" : ""} dark:text-gray-200 transition-colors duration-300`}
         >
           {index + 1}.{task.title}
         </span>
