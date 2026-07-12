@@ -3,7 +3,7 @@ import Header from './components/Header'
 import InputField from './components/InputField'
 import ShowTask from './components/ShowTask'
 import themeContext from './themeContext';
-import AddTaskModalForm from './components/AddTaskModalForm';
+import AddTaskModalForm  from './components/AddTaskModalForm';
 
 export interface Task {
   id: string,
@@ -23,6 +23,10 @@ function App() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchedTasks, setSearchedTasks] = useState<Task[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editableTitle, setEditableTitle] = useState<string>('');
+  const [editableDescription, setEditableDescription] = useState<string>('');
+  const [taskId, setTaskId] = useState<string>('');
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -39,6 +43,14 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    if (editingTask) {
+      setEditableTitle(editingTask.title);
+      setEditableDescription(editingTask.description);
+      setTaskId(editingTask.id);
+    }
+  }, [editingTask]);
+
   const addTask = (title: string, description: string, date: string) =>{
     const newTask: Task = {
       id: crypto.randomUUID(), 
@@ -50,8 +62,8 @@ function App() {
     setTasks(prevTasks => [...prevTasks, newTask]);
   }
 
-  const editTask = (id: string, newTitle: string) => {
-    setTasks(prevTasks => prevTasks.map(task => task.id === id ? { ...task, title: newTitle } : task));
+  const editTask = (id: string, newTitle: string, newDescription: string, newdate: string) => {
+    setTasks(prevTasks => prevTasks.map(task => task.id === id ? { ...task, title: newTitle, description: newDescription, date: newdate } : task));
   }
 
   const deleteTask = (id: string) => {
@@ -79,10 +91,33 @@ function App() {
         <div className="flex flex-row justify-center items-center gap-5 mt-12 mb-8">
           <button onClick={()=>{setIsAddTaskModalOpen(true)}} className='w-32 text-md mt-4 ml-4 bg-blue-500 hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors'>Add Task</button>
         </div>
-        
-      
-        {isAddTaskModalOpen && <AddTaskModalForm addTask={addTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen} />}
-        {tasks.length > 0 ? <ShowTask tasks={tasks} searchValue={searchValue} isSearching={isSearching} searchedTasks={searchedTasks} editTask={editTask} deleteTask={deleteTask} completeTask={completeTask}/> : (
+        {isAddTaskModalOpen && (
+          <AddTaskModalForm
+            editingTask={editingTask}
+            EditableTitle={editableTitle}
+            setEditableTitle={setEditableTitle}
+            EditableDescription={editableDescription}
+            setEditableDescription={setEditableDescription}
+            taskId={taskId}
+            addTask={addTask}
+            editTask={editTask}
+            setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+          />
+        )}
+
+        {tasks.length > 0 ? <ShowTask tasks={tasks} searchValue={searchValue} editingTask={editingTask} setEditingTask={setEditingTask} isSearching={isSearching} searchedTasks={searchedTasks} editTask={editTask} deleteTask={deleteTask} completeTask={completeTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen}/> : editingTask ? (
+          <AddTaskModalForm
+            editingTask={editingTask}
+            EditableTitle={editableTitle}
+            setEditableTitle={setEditableTitle}
+            EditableDescription={editableDescription}
+            setEditableDescription={setEditableDescription}
+            taskId={taskId}
+            addTask={addTask}
+            editTask={editTask}
+            setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+          />
+        ) : (
           <div className='flex flex-col justify-center items-center mt-8'>
             <svg className='opacity-50' width="96" height="96" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M38 43H10C8.34315 43 7 41.6569 7 40V8C7 6.34315 8.34315 5 10 5H19.9844C20.5366 5 21.069 5.21071 21.4452 5.61421L28.5548 13.3858C28.9309 13.7893 29.4634 14 30.0156 14H38C39.6569 14 41 15.3431 41 17V40C41 41.6569 39.6569 43 38 43Z" stroke="#9CA3AF" stroke-width="4"/><path d="M22 26H26" stroke="#9CA3AF" stroke-width="4" stroke-linecap="round"/><path d="M18 32H30" stroke="#9CA3AF" stroke-width="4" stroke-linecap="round"/></svg>
             <p className='text-2xl font-semibold opacity-50 dark:text-gray-100'>No Tasks Found</p>

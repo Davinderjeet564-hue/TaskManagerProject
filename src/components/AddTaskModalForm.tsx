@@ -1,21 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import type { Task } from "../App";
 
 interface AddTaskModalFormProps {
+  editingTask: Task | null;
+  EditableTitle: string,
+  setEditableTitle: (value: string) => void,
+  EditableDescription: string,
+  setEditableDescription: (value: string) => void,
+  taskId: string,
   addTask: (title: string, description: string, date: string) => void;
+  editTask: (id: string, newTitle: string, newDescription: string, newDate: string)=>void,
   setIsAddTaskModalOpen: (value: boolean) => void;
 }
 
 function AddTaskModalForm({
+  editingTask,
+  EditableTitle,
+  setEditableTitle,
+  EditableDescription,
+  setEditableDescription,
+  taskId,
   addTask,
+  editTask,
   setIsAddTaskModalOpen,
 }: AddTaskModalFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
+
+  useEffect(() => {
+    if (editingTask) {
+      setTitle(EditableTitle);
+      setDescription(EditableDescription);
+    } else {
+      setTitle("");
+      setDescription("");
+    }
+  }, [editingTask, EditableTitle, EditableDescription]);
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -25,13 +49,18 @@ function AddTaskModalForm({
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (title.trim() === "" || description.trim() === "") return;
-    const dateString = new Date().toISOString();
-    setDate(dateString);
-    addTask(title, description, date);
-    setTitle("");
-    setDescription("");
-    setDate("");
+
+    if (editingTask) {
+      if (!title.trim() || !description.trim()) return;
+
+      editTask(taskId, title, description, new Date().toISOString());
+      setIsAddTaskModalOpen(false);
+      return;
+    }
+
+    if (!title.trim() || !description.trim()) return;
+
+    addTask(title, description, new Date().toISOString());
     setIsAddTaskModalOpen(false);
   };
 
@@ -109,7 +138,7 @@ function AddTaskModalForm({
             onClick={handleSubmit}
             className="w-24 bg-green-500 text-sm hover:bg-green-600 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
           >
-            Add Task
+            {editingTask ? "Save Changes" : "Add Task"}
           </button>
         </div>
       </div>
