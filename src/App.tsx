@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Header from './components/Header'
 import ShowTask from './components/ShowTask'
 import themeContext from './themeContext';
 import AddTaskModalForm  from './components/AddTaskModalForm';
+import { IoMdSearch } from 'react-icons/io';
 
 export interface Task {
   id: string,
@@ -26,6 +27,7 @@ function App() {
   const [editableTitle, setEditableTitle] = useState<string>('');
   const [editableDescription, setEditableDescription] = useState<string>('');
   const [taskId, setTaskId] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -87,7 +89,8 @@ function App() {
       <div className='flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900'>
         <Header />
         <div className="flex flex-row justify-end items-center gap-5 mt-4 mr-8">
-          <input type="text" className='w-md border border-gray-300 rounded-md p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300' placeholder='Search Task' value={searchValue}  onChange={(e)=>{
+          <IoMdSearch size={24} className="text-gray-500 dark:text-gray-400 absolute right-12" onClick={()=>{inputRef.current?.focus()}} />
+          <input type="text" ref={inputRef} className='w-md border border-gray-300 rounded-md p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300' placeholder='Search Task' value={searchValue}  onChange={(e)=>{
           const value = e.target.value;
           setSearchValue(value);
           setIsSearching(value.length > 0);

@@ -25,9 +25,20 @@ function AddTaskModalForm({
 }: AddTaskModalFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const titleRef = React.useRef<HTMLInputElement>(null);
+  const descriptionRef = React.useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => titleRef.current?.focus(), [titleRef.current]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+  };
+
+  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.currentTarget.value ? descriptionRef.current?.focus() : null;
+    }
   };
 
   useEffect(() => {
@@ -46,8 +57,17 @@ function AddTaskModalForm({
     setDescription(e.target.value);
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDescriptionKeyDown = (
+  e: React.KeyboardEvent<HTMLTextAreaElement>,
+) => {
+  if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
+    handleSubmit();
+  }
+};
+
+  const handleSubmit = (e?: React.SyntheticEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
 
     if (editingTask) {
       if (!title.trim() || !description.trim()) return;
@@ -77,9 +97,11 @@ function AddTaskModalForm({
         </label>
         <input
           type="text"
+          ref={titleRef}
           id="title"
           value={title}
           onChange={handleTitleChange}
+          onKeyDown={handleTitleKeyDown}
           className="w-md border border-gray-300 rounded-lg p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300"
         />
         <label
@@ -121,6 +143,8 @@ function AddTaskModalForm({
           "
           value={description}
           onChange={handleDescriptionChange}
+          onKeyDown={handleDescriptionKeyDown}
+          ref={descriptionRef}
         ></textarea>
 
         <div className="flex flex-row justify-end gap-5 mt-5">
@@ -135,7 +159,7 @@ function AddTaskModalForm({
           </button>
           <button
             type="submit"
-            onClick={handleSubmit}
+            onClick={(e) => handleSubmit(e)}
             className="w-24 bg-green-500 text-sm hover:bg-green-600 text-white dark:text-gray-100 font-semibold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
           >
             {editingTask ? "Save Changes" : "Add Task"}
