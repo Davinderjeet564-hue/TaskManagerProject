@@ -114,10 +114,10 @@ function AddTaskModalForm({
           className="w-full h-32 p-3 border rounded-lg transition-colors duration-200
               resize-none overflow-y-auto
               /* Light Mode Colors */
-              bg-white border-gray-300 text-gray-900
+              bg-white border-gray-300 text-gray-900 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none
               /* Dark Mode Colors */
-              dark:bg-gray-700 dark:border-gray-700 dark:text-gray-100
-              
+              dark:bg-gray-700 dark:border-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:ring-indigo-300 dark:focus:outline-none
+
               /* Base Scrollbar Settings (Hidden by default) */
               scrollbar-width-none
               [&::-webkit-scrollbar]:w-2
