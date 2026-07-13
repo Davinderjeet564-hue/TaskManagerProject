@@ -10,7 +10,8 @@ interface AddTaskModalFormProps {
   taskId: string,
   addTask: (title: string, description: string, date: string) => void;
   editTask: (id: string, newTitle: string, newDescription: string, newDate: string)=>void,
-  setIsAddTaskModalOpen: (value: boolean) => void;
+  handleCloseModal: () => void;
+  
 }
 
 function AddTaskModalForm({
@@ -22,7 +23,7 @@ function AddTaskModalForm({
   taskId,
   addTask,
   editTask,
-  setIsAddTaskModalOpen,
+  handleCloseModal,
 }: AddTaskModalFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -54,20 +55,20 @@ function AddTaskModalForm({
       if (!title.trim() || !description.trim()) return;
 
       editTask(taskId, title, description, new Date().toISOString());
-      setIsAddTaskModalOpen(false);
+      handleCloseModal();
       return;
     }
 
     if (!title.trim() || !description.trim()) return;
 
     addTask(title, description, new Date().toISOString());
-    setIsAddTaskModalOpen(false);
+    handleCloseModal();
   };
-
+  
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 backdrop-blur-sm z-20" onClick={(e)=>{
-      if(e.target === e.currentTarget) setIsAddTaskModalOpen(false)
-    }}> 
+        if(e.target === e.currentTarget) handleCloseModal()
+      }}> 
       <div className="flex flex-col gap-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 z-10 ">
         <label
           htmlFor="title"
@@ -127,16 +128,16 @@ function AddTaskModalForm({
           <button
             type="button"
             onClick={() => {
-              setIsAddTaskModalOpen(false);
+              handleCloseModal();
             }}
-            className="w-24 text-sm bg-red-500 hover:bg-red-600 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
+            className="w-24 text-sm bg-red-500 hover:bg-red-600 text-white dark:text-gray-100 font-semibold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
           >
             Cancel
           </button>
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-24 bg-green-500 text-sm hover:bg-green-600 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
+            className="w-24 bg-green-500 text-sm hover:bg-green-600 text-white dark:text-gray-100 font-semibold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
           >
             {editingTask ? "Save Changes" : "Add Task"}
           </button>

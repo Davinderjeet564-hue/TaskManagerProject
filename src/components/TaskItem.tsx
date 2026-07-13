@@ -1,12 +1,11 @@
-import React, { useState } from "react";
 import type { Task } from "../App";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
 
 
 interface TaskItemProps {
   task: Task;
-  editingTask: Task | null;
   setEditingTask: (task: Task | null) => void;
-  editTask: (id: string, newTitle: string, newDescription: string, newDate: string) => void;
   deleteTask: (id: string) => void;
   completeTask: (id: string) => void;
   index: number;
@@ -15,65 +14,61 @@ interface TaskItemProps {
 
 function TaskItem({
   task,
-  editingTask,
   setEditingTask,
-  editTask,
   deleteTask,
   completeTask,
   index,
   setIsAddTaskModalOpen,
 }: TaskItemProps) {
-  const [localTitle, setLocalTitle] = useState(task.title);
-  const [localDescription, setLocalDescription] = useState(task.description)
-
-  const handleSave = () => {
-    if (localTitle.trim() === "") return;
-    editTask(task.id, localTitle, localDescription, task.date);
-  };
+  
 
   return (
     <li
       key={task.id}
-      className="flex flex-row justify-between items-center bg-gray-300 dark:bg-gray-800 w-full h-36 overflow-visible p-5 rounded-4xl mx-4 transition-colors duration-300"
+      className="flex flex-row justify-between items-start gap-4 p-4 bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300"
     >
       <input
         type="checkbox"
+        title="Complete task"
         checked={task.completed}
         aria-label={`Complete task ${index + 1}`}
         onChange={() => completeTask(task.id)}
-        className="scale-140 cursor-pointer"
+        className="scale-140 cursor-pointer self-center accent-indigo-500 dark:accent-indigo-400 transition-colors duration-300"
       />
-      (
-        <div
-          className={`flex flex-col flex-warp pl-4 font-semibold ${task.completed ? "line-through opacity-50" : ""} dark:text-gray-200 transition-colors duration-300`}
-        >
-          <h2 className="text-3xl dark:text-gray-200 mb-2">{task.title}</h2>
-          <p className="text-sm dark:text-gray-200 indent-4">{task.description}</p>
-        </div>
-      )
+      
+      <div
+        className={`flex flex-col flex-warp pl-4 font-semibold ${task.completed ? "opacity-70 text-gray-100 dark:text-gray-700" : "text-gray-800 dark:text-gray-200"} dark:text-gray-200 transition-colors duration-300`}
+      >
+        <h2 className="text-xl font-bold dark:text-gray-200 mb-2 first-letter:capitalize">{task.title}</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 indent-4 line-clamp-3">{task.description}</p>
+      </div>
+      
       {/*Cancel editing when task is completed*/}
-      <div className="flex flex-col gap-4 dark:text-gray-200">
-        <div className="flex gap-2">
+      <div className="flex flex-col gap-4 dark:text-gray-200 transition-colors duration-300 self-start">
+        <div className="flex gap-2 justify-end">
             <button
               onClick={() => {
                 if (task.completed) return;
                 setEditingTask(task);
                 setIsAddTaskModalOpen(true);
               }}
-              className="bg-blue-500 hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-xl cursor-pointer transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={task.completed}
+              title="Edit Task"
             >
-              Edit
+              <FaRegEdit />
             </button>
           
           <button
             onClick={() => deleteTask(task.id)}
-            className="bg-red-500 hover:bg-red-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors ml-2"
+            className="border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-xl cursor-pointer transition-colors duration-300"
+            title="Delete Task"
           >
-            Delete
+            <MdDeleteOutline />
           </button>
         </div>
-        <p>Date added:{task.date}</p>
+
+        <p className="text-sm text-gray-500 dark:text-gray-400">{task.date}</p>
       </div>
     </li>
   );

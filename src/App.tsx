@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Header from './components/Header'
-import InputField from './components/InputField'
 import ShowTask from './components/ShowTask'
 import themeContext from './themeContext';
 import AddTaskModalForm  from './components/AddTaskModalForm';
@@ -78,6 +77,11 @@ function App() {
     setSearchedTasks(tasks.filter(task => task.title.toLowerCase().includes(value.toLowerCase())));
   }
 
+  const handleCloseModal = () => {
+    setIsAddTaskModalOpen(false);
+    setEditingTask(null); // Reset editing state
+  }
+
   return (
     <themeContext.Provider value={{theme, setTheme}}>
       <div className='flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900'>
@@ -89,7 +93,7 @@ function App() {
           setIsSearching(value.length > 0);
           searchTasks(value)}} /></div>
         <div className="flex flex-row justify-center items-center gap-5 mt-12 mb-8">
-          <button onClick={()=>{setIsAddTaskModalOpen(true)}} className='w-32 text-md mt-4 ml-4 bg-blue-500 hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors'>Add Task</button>
+          <button onClick={()=>{setIsAddTaskModalOpen(true)}} title="Add Task" className='w-32 text-md mt-4 ml-4 bg-blue-500 hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors'>Add Task</button>
         </div>
         {isAddTaskModalOpen && (
           <AddTaskModalForm
@@ -101,11 +105,12 @@ function App() {
             taskId={taskId}
             addTask={addTask}
             editTask={editTask}
-            setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+            handleCloseModal={handleCloseModal}
+            
           />
         )}
 
-        {tasks.length > 0 ? <ShowTask tasks={tasks} searchValue={searchValue} editingTask={editingTask} setEditingTask={setEditingTask} isSearching={isSearching} searchedTasks={searchedTasks} editTask={editTask} deleteTask={deleteTask} completeTask={completeTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen}/> : editingTask ? (
+        {tasks.length > 0 ? <ShowTask tasks={tasks} searchValue={searchValue} setEditingTask={setEditingTask} isSearching={isSearching} searchedTasks={searchedTasks} deleteTask={deleteTask} completeTask={completeTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen}/> : editingTask ? (
           <AddTaskModalForm
             editingTask={editingTask}
             EditableTitle={editableTitle}
@@ -115,7 +120,7 @@ function App() {
             taskId={taskId}
             addTask={addTask}
             editTask={editTask}
-            setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+            handleCloseModal={handleCloseModal}
           />
         ) : (
           <div className='flex flex-col justify-center items-center mt-8'>
