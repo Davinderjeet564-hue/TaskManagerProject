@@ -4,7 +4,6 @@ import type { Task } from "../App";
 interface AddTaskModalFormProps {
   editingTask: Task | null;
   EditableTitle: string,
-  setEditableTitle: (value: string) => void,
   EditableDescription: string,
   setEditableDescription: (value: string) => void,
   taskId: string,
@@ -17,7 +16,6 @@ interface AddTaskModalFormProps {
 function AddTaskModalForm({
   editingTask,
   EditableTitle,
-  setEditableTitle,
   EditableDescription,
   setEditableDescription,
   taskId,
@@ -64,7 +62,8 @@ function AddTaskModalForm({
     addTask(title, description, new Date().toISOString());
     handleCloseModal();
   };
-  
+
+ 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 backdrop-blur-sm z-20" onClick={(e)=>{
         if(e.target === e.currentTarget) handleCloseModal()

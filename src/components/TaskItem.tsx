@@ -1,6 +1,7 @@
 import type { Task } from "../App";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
+import formatDate from "../utils/formatDate";
 
 
 interface TaskItemProps {
@@ -21,23 +22,29 @@ function TaskItem({
   setIsAddTaskModalOpen,
 }: TaskItemProps) {
   
-
+  const [timeStr, dateStr] = formatDate(new Date(task.date));
   return (
     <li
       key={task.id}
       className="flex flex-row justify-between items-start gap-4 p-4 bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300"
-    >
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          setEditingTask(task);
+          setIsAddTaskModalOpen(true);
+        }
+      }}
+   >
       <input
         type="checkbox"
         title="Complete task"
         checked={task.completed}
-        aria-label={`Complete task ${index + 1}`}
+        aria-label={`Complete task: ${index + 1}`}
         onChange={() => completeTask(task.id)}
         className="scale-140 cursor-pointer self-center accent-indigo-500 dark:accent-indigo-400 transition-colors duration-300"
       />
       
       <div
-        className={`flex flex-col flex-warp pl-4 font-semibold ${task.completed ? "opacity-70 text-gray-100 dark:text-gray-700" : "text-gray-800 dark:text-gray-200"} dark:text-gray-200 transition-colors duration-300`}
+        className={`flex flex-col flex-wrap pl-4 font-semibold ${task.completed ? "opacity-70 text-gray-100 dark:text-gray-700" : "text-gray-800 dark:text-gray-200"} dark:text-gray-200 transition-colors duration-300`}
       >
         <h2 className="text-xl font-bold dark:text-gray-200 mb-2 first-letter:capitalize">{task.title}</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 indent-4 line-clamp-3">{task.description}</p>
@@ -67,8 +74,11 @@ function TaskItem({
             <MdDeleteOutline />
           </button>
         </div>
-
-        <p className="text-sm text-gray-500 dark:text-gray-400">{task.date}</p>
+        
+        <div className="flex flex-col gap-1 text-right">
+          <p className="text-sm text-gray-500 dark:text-gray-400">{timeStr}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{dateStr}</p>
+        </div>
       </div>
     </li>
   );

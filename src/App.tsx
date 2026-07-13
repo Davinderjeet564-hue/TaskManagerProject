@@ -99,7 +99,6 @@ function App() {
           <AddTaskModalForm
             editingTask={editingTask}
             EditableTitle={editableTitle}
-            setEditableTitle={setEditableTitle}
             EditableDescription={editableDescription}
             setEditableDescription={setEditableDescription}
             taskId={taskId}
@@ -114,7 +113,6 @@ function App() {
           <AddTaskModalForm
             editingTask={editingTask}
             EditableTitle={editableTitle}
-            setEditableTitle={setEditableTitle}
             EditableDescription={editableDescription}
             setEditableDescription={setEditableDescription}
             taskId={taskId}
