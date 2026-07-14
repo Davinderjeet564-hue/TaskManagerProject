@@ -8,9 +8,9 @@ interface AddTaskModalFormProps {
   setEditableDescription: (value: string) => void,
   taskId: string,
   addTask: (title: string, description: string, date: string) => void;
-  editTask: (id: string, newTitle: string, newDescription: string, newDate: string)=>void,
+  editTask: (id: string, newTitle: string, newDescription: string, newDate: string) => void,
   handleCloseModal: () => void;
-  
+
 }
 
 function AddTaskModalForm({
@@ -58,13 +58,13 @@ function AddTaskModalForm({
   };
 
   const handleDescriptionKeyDown = (
-  e: React.KeyboardEvent<HTMLTextAreaElement>,
-) => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    handleSubmit();
-  }
-};
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
 
   const handleSubmit = (e?: React.SyntheticEvent<HTMLButtonElement>) => {
     e?.preventDefault();
@@ -83,11 +83,11 @@ function AddTaskModalForm({
     handleCloseModal();
   };
 
- 
+
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 backdrop-blur-sm z-20" onClick={(e)=>{
-        if(e.target === e.currentTarget) handleCloseModal()
-      }}> 
+    <div className="fixed inset-0 bg-transparent bg-opacity-50 backdrop-blur-sm z-20" onClick={(e) => {
+      if (e.target === e.currentTarget) handleCloseModal()
+    }}>
       <div className="flex flex-col gap-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 z-10 ">
         <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-gray-200">{editingTask ? "Edit Task" : "Add Task"}</h2>
         <label

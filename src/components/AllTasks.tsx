@@ -38,12 +38,12 @@ function AllTasks({ tasks, searchedTasks, searchValue, setSearchValue, isSearchi
             type="text"
             placeholder="Search"
             className="w-full bg-transparent border border-white/20 rounded-2xl py-3.5 px-4 text-white placeholder-gray-500 outline-none focus:border-white transition-colors"
-            value={searchValue}  onChange={(e)=>{
-          const value = e.target.value;
-          setSearchValue(value);
-          setIsSearching(value.length > 0);
-          searchTasks(value)
-        }}
+            value={searchValue} onChange={(e) => {
+              const value = e.target.value;
+              setSearchValue(value);
+              setIsSearching(value.length > 0);
+              searchTasks(value)
+            }}
           />
           <FaSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
         </div>
