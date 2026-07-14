@@ -1,3 +1,4 @@
+import { LuNotebookPen } from "react-icons/lu";
 import type { Task } from "../App"
 import TaskItem from "./TaskItem"
 import { FaSearch } from 'react-icons/fa'; // Optional: for icons
@@ -27,7 +28,7 @@ function AllTasks({ tasks, searchedTasks, searchValue, setSearchValue, isSearchi
           e.preventDefault();
           setShowAllTasks(false);
         }}>
-          Cancel
+          Go Back
         </button>
       </div>
       <div className="flex flex-col items-center justify-center p-4 gap-4 min-h-auto ">
@@ -65,7 +66,12 @@ function AllTasks({ tasks, searchedTasks, searchValue, setSearchValue, isSearchi
                 />
               </div>
             ))
-          ) : null}
+          ) : (
+            <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+              <LuNotebookPen size={48} color="currentColor" className="mb-2 " />
+              <p className="text-gray-500 dark:text-gray-400">No tasks found.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

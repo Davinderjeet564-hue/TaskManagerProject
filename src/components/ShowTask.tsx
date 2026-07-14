@@ -40,7 +40,7 @@ function ShowTask({tasks, showAllTasks, setShowAllTasks, isSearching, searchedTa
           <div className="flex flex-row justify-start items-start gap-4 mb-6">
             <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Recent Tasks</h2>
             <button className="bg-none text-gray-600 dark:text-gray-400 py-2 px-4 hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700" onClick={() => {setShowAllTasks(prev => !prev)}}>
-              see all
+              See all
             </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
