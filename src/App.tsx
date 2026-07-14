@@ -4,6 +4,8 @@ import ShowTask from './components/ShowTask'
 import themeContext from './themeContext';
 import AddTaskModalForm  from './components/AddTaskModalForm';
 import { IoMdSearch } from 'react-icons/io';
+import AllTasks from './components/AllTasks';
+import Footer from './components/Footer';
 
 export interface Task {
   id: string,
@@ -28,6 +30,7 @@ function App() {
   const [editableDescription, setEditableDescription] = useState<string>('');
   const [taskId, setTaskId] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const [showAllTasks, setShowAllTasks] = useState<boolean>(false);
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -86,6 +89,15 @@ function App() {
 
   return (
     <themeContext.Provider value={{theme, setTheme}}>
+      {showAllTasks ? (
+        <div className="flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900">
+          <Header />
+          <div className="flex flex-col justify-end items-center gap-5 mt-4 mr-8">
+            <AllTasks tasks={tasks}  searchedTasks={searchedTasks} searchValue={searchValue} setSearchValue={setSearchValue} isSearching={isSearching} setIsSearching={setIsSearching} searchTasks={searchTasks} setEditingTask={setEditingTask} deleteTask={deleteTask} completeTask={completeTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen} setShowAllTasks={setShowAllTasks} />
+            <Footer />
+          </div>
+        </div>
+      ) : (
       <div className='flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900'>
         <Header />
         <div className="flex flex-row justify-end items-center gap-5 mt-4 mr-8">
@@ -112,7 +124,7 @@ function App() {
           />
         )}
 
-        {tasks.length > 0 ? <ShowTask tasks={tasks} searchValue={searchValue} setEditingTask={setEditingTask} isSearching={isSearching} searchedTasks={searchedTasks} deleteTask={deleteTask} completeTask={completeTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen}/> : editingTask ? (
+        {tasks.length > 0 ? <ShowTask showAllTasks={showAllTasks} setShowAllTasks={setShowAllTasks} tasks={tasks} searchValue={searchValue} setEditingTask={setEditingTask} isSearching={isSearching} searchedTasks={searchedTasks} deleteTask={deleteTask} completeTask={completeTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen}/> : editingTask ? (
           <AddTaskModalForm
             editingTask={editingTask}
             EditableTitle={editableTitle}
@@ -129,7 +141,8 @@ function App() {
             <p className='text-2xl font-semibold opacity-50 dark:text-gray-100'>No Tasks Found</p>
           </div>
           )}
-      </div>
+          <Footer />
+      </div>)}
     </themeContext.Provider>
   )
 }
