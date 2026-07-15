@@ -17,9 +17,10 @@ interface ShowTaskProps {
 }
 
 function ShowTask({ tasks, showAllTasks, setShowAllTasks, isSearching, searchedTasks, deleteTask, completeTask, setIsAddTaskModalOpen, setEditingTask }: ShowTaskProps) {
-  const orderedTasks = useMemo(() => {
-  return [...tasks].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}, [tasks]);
+  const orderedTasks = useMemo(() =>
+    [...tasks].toSorted((a, b) => b.date.localeCompare(a.date)),
+    [tasks]
+  );
 
 
   return (
