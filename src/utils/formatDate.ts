@@ -1,4 +1,7 @@
 function formatDate(date: Date): [string, string] {
+  if (isNaN(date.getTime())) {
+    return ["--:-- --", "--/--/--"];
+  }
   // Format time: 11:34 am
   let hours = date.getHours();
   const minutes = date.getMinutes().toString().padStart(2, '0');

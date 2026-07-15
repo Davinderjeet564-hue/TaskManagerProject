@@ -91,7 +91,7 @@ function App() {
     <themeContext.Provider value={{ theme, setTheme }}>
       {showAllTasks ? (
         <div className="flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900">
-          <Header />
+          <Header onClick={() => setShowAllTasks(false)}/>
           <div className="flex flex-col justify-end items-center gap-5 mt-4 mr-8">
             <AllTasks tasks={tasks} searchedTasks={searchedTasks} searchValue={searchValue} setSearchValue={setSearchValue} isSearching={isSearching} setIsSearching={setIsSearching} searchTasks={searchTasks} setEditingTask={setEditingTask} deleteTask={deleteTask} completeTask={completeTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen} setShowAllTasks={setShowAllTasks} />
             <Footer />
@@ -101,13 +101,23 @@ function App() {
         <div className='flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900'>
           <Header />
           <div className="flex flex-row justify-end items-center gap-5 mt-4 mr-8">
-            <IoMdSearch size={24} className="text-gray-500 dark:text-gray-400 absolute right-12" onClick={() => { inputRef.current?.focus() }} />
-            <input type="text" ref={inputRef} className='w-md border border-gray-300 rounded-md p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300' placeholder='Search Task' value={searchValue} onChange={(e) => {
-              const value = e.target.value;
-              setSearchValue(value);
-              setIsSearching(value.length > 0);
-              searchTasks(value)
-            }} /></div>
+            <div className='relative w-full max-w-md mx-auto mt-12 px-4'>
+              <input 
+                type="text" 
+                ref={inputRef} 
+                className='w-full border border-gray-300 rounded-md p-4 pl-4 pr-12 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300' 
+                placeholder='Search Task' 
+                value={searchValue} 
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSearchValue(value);
+                  setIsSearching(value.length > 0);
+                  searchTasks(value)
+                }} />
+              <IoMdSearch size={24} 
+              className="text-gray-500 dark:text-gray-400 absolute right-8 top-1/2 -translate-y-1/2 transition-colors duration-300 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 dark:focus:text-indigo-500" onClick={() => { inputRef.current?.focus() }} />
+            </div>
+          </div>
           <div className="flex flex-row justify-center items-center gap-5 mt-12 mb-8">
             <button onClick={() => { setIsAddTaskModalOpen(true) }} title="Add Task" className='w-32 text-md mt-4 ml-4 bg-blue-500 hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors'>Add Task</button>
           </div>

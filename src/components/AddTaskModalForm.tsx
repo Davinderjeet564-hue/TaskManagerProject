@@ -88,7 +88,7 @@ function AddTaskModalForm({
     <div className="fixed inset-0 bg-transparent bg-opacity-50 backdrop-blur-sm z-20" onClick={(e) => {
       if (e.target === e.currentTarget) handleCloseModal()
     }}>
-      <div className="flex flex-col gap-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 z-10 ">
+      <div className="flex flex-col w-72 sm:w-96 md:w-md gap-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 z-10 ">
         <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-gray-200">{editingTask ? "Edit Task" : "Add Task"}</h2>
         <label
           htmlFor="title"
@@ -103,7 +103,7 @@ function AddTaskModalForm({
           value={title}
           onChange={handleTitleChange}
           onKeyDown={handleTitleKeyDown}
-          className="w-md border border-gray-300 rounded-lg p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300"
+          className="border border-gray-300 rounded-lg p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300"
         />
         <label
           htmlFor="description"

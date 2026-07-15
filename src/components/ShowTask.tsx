@@ -17,10 +17,10 @@ interface ShowTaskProps {
 }
 
 function ShowTask({ tasks, showAllTasks, setShowAllTasks, isSearching, searchedTasks, deleteTask, completeTask, setIsAddTaskModalOpen, setEditingTask }: ShowTaskProps) {
-  const orderedTasks = useMemo(() =>
-    [...tasks].toSorted((a, b) => b.date.localeCompare(a.date)),
-    [tasks]
-  );
+  const orderedTasks = useMemo(() => {
+  return [...tasks].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}, [tasks]);
+
 
   return (
     <>
@@ -28,7 +28,7 @@ function ShowTask({ tasks, showAllTasks, setShowAllTasks, isSearching, searchedT
         <div className='p-6 bg-gray-100 min-h-auto dark:bg-gray-900 transition-colors duration-300'>
           <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Search Results</h2>
           {searchedTasks && searchedTasks.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
               {searchedTasks.map((task, index) => {
                 return (<TaskItem task={task} setEditingTask={setEditingTask} setIsAddTaskModalOpen={setIsAddTaskModalOpen} deleteTask={deleteTask} completeTask={completeTask} index={index} />)
               })}
@@ -42,13 +42,13 @@ function ShowTask({ tasks, showAllTasks, setShowAllTasks, isSearching, searchedT
         </div>
       ) : (
         <div className="p-6 bg-gray-100 min-h-auto dark:bg-gray-900 transition-colors duration-300">
-          <div className="flex flex-row justify-start items-start gap-4 mb-6">
+          <div className="flex flex-row justify-start items-start gap-4 mb-6 md:justify-around">
             <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Recent Tasks</h2>
             <button className="bg-none text-gray-600 dark:text-gray-400 py-2 px-4 hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700" onClick={() => { setShowAllTasks(prev => !prev) }}>
               See all
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
             {orderedTasks && orderedTasks.length > 0 ? (
               orderedTasks.map((task, index) => {
                 if (index > 8) return null; // Limit to 9 tasks for display

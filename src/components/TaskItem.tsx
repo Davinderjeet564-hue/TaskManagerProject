@@ -26,7 +26,7 @@ function TaskItem({
   return (
     <li
       key={task.id}
-      className="flex flex-row justify-between items-start gap-4 p-4 bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300"
+      className="w-full max-w-md flex flex-row justify-between items-start gap-4 p-4 bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           setEditingTask(task);
