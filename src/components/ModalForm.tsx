@@ -180,14 +180,14 @@ function ModalForm({
             onClick={() => {
               handleCloseModal();
             }}
-            className="w-24 text-sm bg-red-500 hover:bg-red-600 text-white dark:text-gray-100 font-semibold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
+            className="w-24 text-xs bg-red-500 hover:bg-red-600 text-white dark:text-gray-100 font-semibold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
           >
             Cancel
           </button>
           <button
             type="submit"
             onClick={(e) => handleSubmit(e)}
-            className="w-24 bg-green-500 text-sm hover:bg-green-600 text-white dark:text-gray-100 font-semibold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
+            className="w-24 bg-green-500 text-xs hover:bg-green-600 text-white dark:text-gray-100 font-semibold py-2 px-4 rounded-lg cursor-pointer transition-colors duration-300"
           >
             {editingTask ? "Save Changes" : "Add Task"}
           </button>
