@@ -100,7 +100,7 @@ function App() {
       ) : (
         <div className='flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900'>
           <Header />
-          <div className="flex flex-row justify-end items-center gap-5 mt-4 mr-8">
+          <div className="flex flex-row justify-end items-center gap-5 mt-4 ">
             <div className='relative w-full max-w-md mx-auto mt-12 px-4'>
               <input 
                 type="text" 

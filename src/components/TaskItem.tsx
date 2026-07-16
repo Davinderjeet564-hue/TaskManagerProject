@@ -22,7 +22,7 @@ function TaskItem({
   setIsAddTaskModalOpen,
 }: TaskItemProps) {
 
-  const [timeStr, dateStr] = formatDate(new Date(task.date));
+  const [timeStr, dateStr] = formatDate(task.date ? new Date(task.date) : new Date()) || ["", ""];
   return (
     <li
       key={task.id}

@@ -1,6 +1,6 @@
-function formatDate(date: Date): [string, string] {
+function formatDate(date: Date): [string, string] | null {
   if (isNaN(date.getTime())) {
-    return ["--:-- --", "--/--/--"];
+    return null;
   }
   // Format time: 11:34 am
   let hours = date.getHours();
