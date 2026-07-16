@@ -33,13 +33,13 @@ function ShowAllTasks({
   setShowAllTasks,
 }: ShowAllTasksProps) {
   return (
-    <div className="flex min-h-auto w-72 sm:w-96 md:w-md flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900">
-      <div className="mx-4 md:mx-8 flex flex-row justify-between items-start min-h-auto gap-4 ml-4v mt-4">
-        <h2 className="text-2xl font-semibold tracking-wide mb-6 text-gray-800 dark:text-gray-200">
+    <div className="flex min-h-auto w-full max-w-md md:max-w-2xl lg:max-w-4xl flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900 px-2 sm:px-4">
+      <div className="flex flex-row justify-between items-center min-h-auto gap-4 mt-4 mb-6">
+        <h2 className="text-2xl font-semibold tracking-wide text-gray-800 dark:text-gray-200">
           All Tasks
         </h2>
         <button
-          className="bg-none text-gray-600 dark:text-gray-400 py-2 px-4 rounded-xl hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="bg-none text-gray-600 dark:text-gray-400 py-2 px-4 rounded-xl hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
           onClick={(e) => {
             e.preventDefault();
             setShowAllTasks(false);
@@ -48,13 +48,13 @@ function ShowAllTasks({
           Go Back
         </button>
       </div>
-      <div className="mx-4 md:mx-8 w-72 sm:w-96 md:w-md flex flex-col items-center justify-center p-4 gap-4 min-h-auto ">
+      <div className="w-full flex flex-col items-center justify-center gap-4 min-h-auto mb-6">
         {/* Search Bar */}
-        <div className="relative mb-8 w-full max-w-xl">
+        <div className="relative mb-6 w-full">
           <input
             type="text"
             placeholder="Search"
-            className="w-full bg-transparent border border-white/20 rounded-2xl py-3.5 px-4 text-white placeholder-gray-500 outline-none focus:border-white transition-colors"
+            className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl py-3.5 pl-4 pr-12 text-gray-900 dark:text-gray-100 placeholder-gray-500 outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
             value={searchValue}
             onChange={(e) => {
               const value = e.target.value;
@@ -63,17 +63,14 @@ function ShowAllTasks({
               searchTasks(value);
             }}
           />
-          <FaSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <FaSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-450 dark:text-gray-400 w-5 h-5" />
         </div>
 
         {/* Cards List Area */}
-        <div className="flex-1 flex flex-col gap-4 w-72 sm:w-96 md:w-md">
+        <div className="flex-1 flex flex-col gap-4 w-full">
           {(isSearching ? searchedTasks : tasks)?.length > 0 ? (
             (isSearching ? searchedTasks : tasks).map((task, index) => (
-              <div
-                key={task.id}
-                className="w-full min-h-auto rounded-2xl border border-white/20 bg-transparent hover:bg-white/5 transition-colors cursor-pointer"
-              >
+              <div key={task.id} className="w-full">
                 <TaskItem
                   task={task}
                   setEditingTask={setEditingTask}

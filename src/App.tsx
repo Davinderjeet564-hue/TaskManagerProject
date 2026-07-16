@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "./components/Header";
 import ShowRecentTasks from "./components/ShowRecentTasks";
 import themeContext from "./themeContext";
@@ -30,9 +30,6 @@ function App() {
   const [searchedTasks, setSearchedTasks] = useState<Task[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [editableTitle, setEditableTitle] = useState<string>("");
-  const [editableDescription, setEditableDescription] = useState<string>("");
-  const [taskId, setTaskId] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [showAllTasks, setShowAllTasks] = useState<boolean>(false);
 
@@ -50,14 +47,6 @@ function App() {
     }
     localStorage.setItem("theme", theme);
   }, [theme]);
-
-  useEffect(() => {
-    if (editingTask) {
-      setEditableTitle(editingTask.title);
-      setEditableDescription(editingTask.description);
-      setTaskId(editingTask.id);
-    }
-  }, [editingTask]);
 
   const addTask = (title: string, description: string, date: string) => {
     const newTask: Task = {
@@ -123,7 +112,7 @@ function App() {
       {showAllTasks ? (
         <div className="flex min-h-screen flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900">
           <Header onClick={() => setShowAllTasks(false)} />
-          <div className="flex flex-col justify-end items-center gap-5 mt-4 mr-8">
+          <div className="flex flex-col items-center gap-5 mt-4 px-4 sm:px-6 w-full mx-auto">
             <ShowAllTasks
               tasks={tasks}
               searchedTasks={searchedTasks}
@@ -183,11 +172,7 @@ function App() {
             <ModalForm
               completeTask={completeTask}
               editingTask={editingTask}
-              setEditingTask={setEditingTask}
-              EditableTitle={editableTitle}
-              EditableDescription={editableDescription}
-              setEditableDescription={setEditableDescription}
-              taskId={taskId}
+              taskId={editingTask?.id || ""}
               addTask={addTask}
               editTask={editTask}
               handleCloseModal={handleCloseModal}
@@ -196,7 +181,6 @@ function App() {
 
           {tasks.length > 0 ? (
             <ShowRecentTasks
-              showAllTasks={showAllTasks}
               setShowAllTasks={setShowAllTasks}
               tasks={tasks}
               searchValue={searchValue}
@@ -211,11 +195,7 @@ function App() {
             <ModalForm
               completeTask={completeTask}
               editingTask={editingTask}
-              setEditingTask={setEditingTask}
-              EditableTitle={editableTitle}
-              EditableDescription={editableDescription}
-              setEditableDescription={setEditableDescription}
-              taskId={taskId}
+              taskId={editingTask.id}
               addTask={addTask}
               editTask={editTask}
               handleCloseModal={handleCloseModal}

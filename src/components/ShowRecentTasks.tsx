@@ -5,7 +5,6 @@ import { useMemo } from "react";
 
 interface ShowRecentTasksProps {
   tasks: Task[];
-  showAllTasks: boolean;
   setShowAllTasks: (value: boolean | ((prev: boolean) => boolean)) => void;
   searchValue: string;
   isSearching: boolean;
@@ -18,7 +17,6 @@ interface ShowRecentTasksProps {
 
 function ShowRecentTasks({
   tasks,
-  showAllTasks,
   setShowAllTasks,
   isSearching,
   searchedTasks,
@@ -40,17 +38,19 @@ function ShowRecentTasks({
             Search Results
           </h2>
           {searchedTasks && searchedTasks.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-stretch">
               {searchedTasks.map((task, index) => {
                 return (
-                  <TaskItem
-                    task={task}
-                    setEditingTask={setEditingTask}
-                    setIsAddTaskModalOpen={setIsAddTaskModalOpen}
-                    deleteTask={deleteTask}
-                    completeTask={completeTask}
-                    index={index}
-                  />
+                  <div key={task.id} className="w-full">
+                    <TaskItem
+                      task={task}
+                      setEditingTask={setEditingTask}
+                      setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+                      deleteTask={deleteTask}
+                      completeTask={completeTask}
+                      index={index}
+                    />
+                  </div>
                 );
               })}
             </div>
@@ -65,12 +65,12 @@ function ShowRecentTasks({
         </div>
       ) : (
         <div className="p-6 bg-gray-100 min-h-auto dark:bg-gray-900 transition-colors duration-300">
-          <div className="flex flex-row justify-start items-start gap-4 mb-6 md:justify-around">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">
+          <div className="flex flex-row justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
               Recent Tasks
             </h2>
             <button
-              className="bg-none text-gray-600 dark:text-gray-400 py-2 px-4 hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700"
+              className="bg-none text-gray-600 dark:text-gray-400 py-2 px-4 hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
               onClick={() => {
                 setShowAllTasks((prev) => !prev);
               }}
@@ -78,19 +78,23 @@ function ShowRecentTasks({
               See all
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-stretch">
             {orderedTasks && orderedTasks.length > 0 ? (
               orderedTasks.map((task, index) => {
                 if (index > 8) return null; // Limit to 9 tasks for display
                 return (
-                  <TaskItem
-                    task={task}
-                    setEditingTask={setEditingTask}
-                    setIsAddTaskModalOpen={setIsAddTaskModalOpen}
-                    deleteTask={deleteTask}
-                    completeTask={completeTask}
-                    index={index}
-                  />
+                  <div
+                    key={task.id}
+                    className="w-full" >
+                    <TaskItem
+                      task={task}
+                      setEditingTask={setEditingTask}
+                      setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+                      deleteTask={deleteTask}
+                      completeTask={completeTask}
+                      index={index}
+                    />
+                  </div>
                 );
               })
             ) : (

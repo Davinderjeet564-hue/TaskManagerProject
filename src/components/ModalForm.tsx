@@ -1,75 +1,58 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import type { ChangeEvent, KeyboardEvent, SyntheticEvent } from "react";
 import type { Task } from "../App";
 
 interface ModalFormProps {
   editingTask: Task | null;
-  EditableTitle: string,
-  EditableDescription: string,
-  setEditableDescription: (value: string) => void,
-  taskId: string,
+  taskId: string;
   addTask: (title: string, description: string, date: string) => void;
-  editTask: (id: string, newTitle: string, newDescription: string, newDate: string) => void,
+  editTask: (id: string, newTitle: string, newDescription: string, newDate: string) => void;
   handleCloseModal: () => void;
-  completeTask: (id: string) => void,
-  setEditingTask: (task: Task | null) => void,
+  completeTask: (id: string) => void;
 }
 
 function ModalForm({
   editingTask,
-  EditableTitle,
-  EditableDescription,
-  setEditableDescription,
   taskId,
   completeTask,
   addTask,
   editTask,
-  setEditingTask,
   handleCloseModal,
 }: ModalFormProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const titleRef = React.useRef<HTMLInputElement>(null);
-  const descriptionRef = React.useRef<HTMLTextAreaElement>(null);
+  const [title, setTitle] = useState(() => (editingTask ? editingTask.title : ""));
+  const [description, setDescription] = useState(() => (editingTask ? editingTask.description : ""));
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => titleRef.current?.focus(), [titleRef.current]);
+  useEffect(() => {
+    titleRef.current?.focus();
+  }, []);
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleTitleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      e.currentTarget.value ? descriptionRef.current?.focus() : null;
+      if (e.currentTarget.value) {
+        descriptionRef.current?.focus();
+      }
     }
   };
 
-  useEffect(() => {
-    if (editingTask) {
-      setTitle(EditableTitle);
-      setDescription(EditableDescription);
-    } else {
-      setTitle("");
-      setDescription("");
-    }
-  }, [editingTask, EditableTitle, EditableDescription]);
-
-  const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
   };
 
-  const handleDescriptionKeyDown = (
-    e: React.KeyboardEvent<HTMLTextAreaElement>,
-  ) => {
+  const handleDescriptionKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
     }
   };
 
-  const handleSubmit = (e?: React.SyntheticEvent<HTMLButtonElement>) => {
+  const handleSubmit = (e?: SyntheticEvent<HTMLButtonElement>) => {
     e?.preventDefault();
 
     if (editingTask) {
@@ -88,10 +71,12 @@ function ModalForm({
 
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 backdrop-blur-sm z-20" onClick={(e) => {
+    <div className="fixed inset-0 bg-black/45 backdrop-blur-sm z-20 overflow-y-auto flex items-center justify-center p-4" onClick={(e) => {
       if (e.target === e.currentTarget) handleCloseModal()
     }}>
-      <div className="flex flex-col w-72 sm:w-96 md:w-md gap-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 z-10 ">
+      <div className="flex flex-col w-full max-w-md gap-5 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 sm:p-8 my-auto z-10" onClick={(e) => {
+        e.stopPropagation();
+      }}>
         <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-gray-200">{editingTask ? "Edit Task" : "Add Task"}</h2>
         <label
           htmlFor="title"
