@@ -55,12 +55,10 @@ function TaskItem({
         <div className="flex gap-2 justify-end">
           <button
             onClick={() => {
-              if (task.completed) return;
               setEditingTask(task);
               setIsAddTaskModalOpen(true);
             }}
             className="border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-xl cursor-pointer transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={task.completed}
             title="Edit Task"
           >
             <FaRegEdit />

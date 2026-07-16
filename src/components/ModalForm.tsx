@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { Task } from "../App";
 
-interface AddTaskModalFormProps {
+interface ModalFormProps {
   editingTask: Task | null;
   EditableTitle: string,
   EditableDescription: string,
@@ -10,19 +10,22 @@ interface AddTaskModalFormProps {
   addTask: (title: string, description: string, date: string) => void;
   editTask: (id: string, newTitle: string, newDescription: string, newDate: string) => void,
   handleCloseModal: () => void;
-
+  completeTask: (id: string) => void,
+  setEditingTask: (task: Task | null) => void,
 }
 
-function AddTaskModalForm({
+function ModalForm({
   editingTask,
   EditableTitle,
   EditableDescription,
   setEditableDescription,
   taskId,
+  completeTask,
   addTask,
   editTask,
+  setEditingTask,
   handleCloseModal,
-}: AddTaskModalFormProps) {
+}: ModalFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const titleRef = React.useRef<HTMLInputElement>(null);
@@ -103,7 +106,7 @@ function AddTaskModalForm({
           value={title}
           onChange={handleTitleChange}
           onKeyDown={handleTitleKeyDown}
-          className="border border-gray-300 rounded-lg p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300"
+          className={`border border-gray-300 rounded-lg p-4 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-none transition-colors duration-300 ${editingTask && editingTask.completed ? "opacity-70 text-gray-700 dark:text-gray-200" : "text-gray-800 dark:text-gray-200"}`}
         />
         <label
           htmlFor="description"
@@ -112,10 +115,10 @@ function AddTaskModalForm({
           Description
         </label>
         <textarea
-          className="w-full h-32 p-3 border rounded-lg transition-colors duration-200
+          className={`w-full h-32 p-3 border rounded-lg transition-colors duration-200
               resize-none overflow-y-auto
               /* Light Mode Colors */
-              bg-white border-gray-300 text-gray-900 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none
+              bg-white border-gray-300 text-gray-900 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none ${editingTask && editingTask.completed ? "opacity-70 text-gray-700 dark:text-gray-200" : "text-gray-800 dark:text-gray-200"}
               /* Dark Mode Colors */
               dark:bg-gray-700 dark:border-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:ring-indigo-300 dark:focus:outline-none
 
@@ -141,12 +144,35 @@ function AddTaskModalForm({
               /* Thumb Hover Effect (When dragging the scrollbar itself) */
               hover:[&::-webkit-scrollbar-thumb]:hover:bg-slate-400
               dark:hover:[&::-webkit-scrollbar-thumb]:hover:bg-slate-500
-          "
+          `}
           value={description}
           onChange={handleDescriptionChange}
           onKeyDown={handleDescriptionKeyDown}
           ref={descriptionRef}
         ></textarea>
+
+        {editingTask && 
+          <div className="flex items-center justify-center gap-3 mt-2">
+            <label
+              htmlFor="Completed"
+              className="text-sm font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-200"
+            >
+              Completed
+            </label>
+
+            <label htmlFor="Completed" className="relative flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                id="Completed"
+                checked={editingTask.completed}
+                onChange={() => completeTask(editingTask.id)}
+                className="peer sr-only"
+              />
+              <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-green-500 dark:bg-gray-600"/>
+              <div className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5" />
+            </label>
+          </div>
+        }
 
         <div className="flex flex-row justify-end gap-5 mt-5">
           <button
@@ -171,4 +197,4 @@ function AddTaskModalForm({
   );
 }
 
-export default AddTaskModalForm;
+export default ModalForm;
