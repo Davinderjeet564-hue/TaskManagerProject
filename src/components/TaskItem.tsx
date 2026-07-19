@@ -2,7 +2,7 @@ import type { Task } from "../App";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import formatDate from "../utils/formatDate";
-
+import { useAuth } from "../context/AuthContext";
 
 interface TaskItemProps {
   task: Task;
@@ -11,6 +11,7 @@ interface TaskItemProps {
   completeTask: (id: string) => void;
   index: number;
   setIsAddTaskModalOpen: (value: boolean) => void;
+  onOpenAuthModal?: () => void;
 }
 
 function TaskItem({
@@ -20,17 +21,32 @@ function TaskItem({
   completeTask,
   index,
   setIsAddTaskModalOpen,
+  onOpenAuthModal,
 }: TaskItemProps) {
-
+  const { user } = useAuth();
   const [timeStr, dateStr] = formatDate(task.date ? new Date(task.date) : new Date()) || ["", ""];
+
+  const handleEditClick = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!user) {
+      if (onOpenAuthModal) {
+        onOpenAuthModal();
+      } else {
+        alert("Task editing is only available for signed-in users. Please sign in to edit tasks.");
+      }
+      return;
+    }
+    setEditingTask(task);
+    setIsAddTaskModalOpen(true);
+  };
+
   return (
     <li
       key={task.id}
       className="w-full flex flex-row justify-between items-start gap-4 p-4 bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300"
       onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          setEditingTask(task);
-          setIsAddTaskModalOpen(true);
+        if (e.target === e.currentTarget && user) {
+          handleEditClick();
         }
       }}
     >
@@ -44,22 +60,31 @@ function TaskItem({
       />
 
       <div
-        className={`flex-1 min-w-0 flex flex-col pl-4 font-semibold ${task.completed ? "opacity-70 text-gray-700 dark:text-gray-700" : "text-gray-800 dark:text-gray-200"} dark:text-gray-200 transition-colors duration-300`}
+        className={`flex-1 min-w-0 flex flex-col pl-4 font-semibold ${
+          task.completed
+            ? "opacity-70 text-gray-700 dark:text-gray-700"
+            : "text-gray-800 dark:text-gray-200"
+        } dark:text-gray-200 transition-colors duration-300`}
       >
-        <h2 className="text-xl font-bold dark:text-gray-200 mb-2 first-letter:capitalize truncate sm:whitespace-normal line-clamp-1">{task.title}</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 indent-4 line-clamp-3 break-words">{task.description}</p>
+        <h2 className="text-xl font-bold dark:text-gray-200 mb-2 first-letter:capitalize truncate sm:whitespace-normal line-clamp-1">
+          {task.title}
+        </h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 indent-4 line-clamp-3 break-words">
+          {task.description}
+        </p>
       </div>
 
-      {/*Cancel editing when task is completed*/}
       <div className="flex flex-col gap-3 shrink-0 items-end self-start dark:text-gray-200 transition-colors duration-300">
         <div className="flex gap-2 justify-end">
           <button
-            onClick={() => {
-              setEditingTask(task);
-              setIsAddTaskModalOpen(true);
-            }}
-            className="border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold p-2 sm:py-2 sm:px-4 rounded-xl cursor-pointer transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Edit Task"
+            onClick={handleEditClick}
+            disabled={!user}
+            className={`border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold p-2 sm:py-2 sm:px-4 rounded-xl transition-colors duration-300 ${
+              !user
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
+            }`}
+            title={user ? "Edit Task" : "Sign in to edit tasks"}
           >
             <FaRegEdit />
           </button>

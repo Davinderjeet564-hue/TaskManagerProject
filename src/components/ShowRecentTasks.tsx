@@ -13,6 +13,7 @@ interface ShowRecentTasksProps {
   deleteTask: (id: string) => void;
   completeTask: (id: string) => void;
   setIsAddTaskModalOpen: (value: boolean) => void;
+  onOpenAuthModal?: () => void;
 }
 
 function ShowRecentTasks({
@@ -24,6 +25,7 @@ function ShowRecentTasks({
   completeTask,
   setIsAddTaskModalOpen,
   setEditingTask,
+  onOpenAuthModal,
 }: ShowRecentTasksProps) {
   const orderedTasks = useMemo(
     () => [...tasks].toSorted((a, b) => b.date.localeCompare(a.date)),
@@ -49,6 +51,7 @@ function ShowRecentTasks({
                       deleteTask={deleteTask}
                       completeTask={completeTask}
                       index={index}
+                      onOpenAuthModal={onOpenAuthModal}
                     />
                   </div>
                 );
@@ -83,9 +86,7 @@ function ShowRecentTasks({
               orderedTasks.map((task, index) => {
                 if (index > 8) return null; // Limit to 9 tasks for display
                 return (
-                  <div
-                    key={task.id}
-                    className="w-full" >
+                  <div key={task.id} className="w-full">
                     <TaskItem
                       task={task}
                       setEditingTask={setEditingTask}
@@ -93,6 +94,7 @@ function ShowRecentTasks({
                       deleteTask={deleteTask}
                       completeTask={completeTask}
                       index={index}
+                      onOpenAuthModal={onOpenAuthModal}
                     />
                   </div>
                 );

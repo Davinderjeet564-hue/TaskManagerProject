@@ -1,7 +1,7 @@
 import { LuNotebookPen } from "react-icons/lu";
 import type { Task } from "../App";
 import TaskItem from "./TaskItem";
-import { FaSearch } from "react-icons/fa"; // Optional: for icons
+import { FaSearch } from "react-icons/fa";
 
 interface ShowAllTasksProps {
   tasks: Task[];
@@ -16,6 +16,7 @@ interface ShowAllTasksProps {
   completeTask: (id: string) => void;
   setIsAddTaskModalOpen: (value: boolean) => void;
   setShowAllTasks: (value: boolean) => void;
+  onOpenAuthModal?: () => void;
 }
 
 function ShowAllTasks({
@@ -31,6 +32,7 @@ function ShowAllTasks({
   completeTask,
   setIsAddTaskModalOpen,
   setShowAllTasks,
+  onOpenAuthModal,
 }: ShowAllTasksProps) {
   return (
     <div className="flex min-h-auto w-full max-w-md md:max-w-2xl lg:max-w-4xl flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900 px-2 sm:px-4">
@@ -78,6 +80,7 @@ function ShowAllTasks({
                   deleteTask={deleteTask}
                   completeTask={completeTask}
                   index={index}
+                  onOpenAuthModal={onOpenAuthModal}
                 />
               </div>
             ))
