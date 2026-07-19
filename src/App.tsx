@@ -6,6 +6,7 @@ import ModalForm from "./components/ModalForm";
 import { IoMdSearch } from "react-icons/io";
 import ShowAllTasks from "./components/ShowAllTasks";
 import Footer from "./components/Footer";
+import loadStoredTasks from "./loadTasks";
 
 export interface Task {
   id: string;
@@ -16,11 +17,7 @@ export interface Task {
 }
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>(() =>
-    localStorage.getItem("tasks")
-      ? JSON.parse(localStorage.getItem("tasks") || "[]")
-      : [],
-  );
+  const [tasks, setTasks] = useState<Task[]>(loadStoredTasks());
 
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") || "light",
