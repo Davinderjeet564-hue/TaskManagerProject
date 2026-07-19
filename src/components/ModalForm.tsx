@@ -137,10 +137,10 @@ function ModalForm({
         ></textarea>
 
         {editingTask && 
-          <div className="flex items-center justify-center gap-3 mt-2">
+          <div className="flex items-center justify-start gap-3 mt-2">
             <label
               htmlFor="Completed"
-              className="text-sm font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-200"
+              className={`text-sm font-semibold opacity-70 uppercase tracking-wide text-gray-700 dark:text-gray-200 ${editingTask.completed ? "opacity-100" : ""}`}
             >
               Completed
             </label>

@@ -46,7 +46,7 @@ function TaskItem({
       <div
         className={`flex-1 min-w-0 flex flex-col pl-4 font-semibold ${task.completed ? "opacity-70 text-gray-700 dark:text-gray-700" : "text-gray-800 dark:text-gray-200"} dark:text-gray-200 transition-colors duration-300`}
       >
-        <h2 className="text-xl font-bold dark:text-gray-200 mb-2 first-letter:capitalize truncate sm:whitespace-normal">{task.title}</h2>
+        <h2 className="text-xl font-bold dark:text-gray-200 mb-2 first-letter:capitalize truncate sm:whitespace-normal line-clamp-1">{task.title}</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 indent-4 line-clamp-3 break-words">{task.description}</p>
       </div>
 
