@@ -1,7 +1,8 @@
+import { useRef } from "react";
 import { LuNotebookPen } from "react-icons/lu";
 import type { Task } from "../App";
 import TaskItem from "./TaskItem";
-import { FaSearch } from "react-icons/fa";
+import SearchBar from "./SearchBar";
 
 interface ShowAllTasksProps {
   tasks: Task[];
@@ -34,6 +35,8 @@ function ShowAllTasks({
   setShowAllTasks,
   onOpenAuthModal,
 }: ShowAllTasksProps) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   return (
     <div className="flex min-h-auto w-full max-w-md md:max-w-2xl lg:max-w-4xl flex-col transition-colors duration-300 bg-gray-100 dark:bg-gray-900 px-2 sm:px-4">
       <div className="flex flex-row justify-between items-center min-h-auto gap-4 mt-4 mb-6">
@@ -51,21 +54,15 @@ function ShowAllTasks({
         </button>
       </div>
       <div className="w-full flex flex-col items-center justify-center gap-4 min-h-auto mb-6">
-        {/* Search Bar */}
-        <div className="relative mb-6 w-full">
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl py-3.5 pl-4 pr-12 text-gray-900 dark:text-gray-100 placeholder-gray-500 outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
-            value={searchValue}
-            onChange={(e) => {
-              const value = e.target.value;
-              setSearchValue(value);
-              setIsSearching(value.length > 0);
-              searchTasks(value);
-            }}
+        <div className="flex-1 flex flex-col gap-4 w-full">
+          {/* Search Bar */}
+          <SearchBar
+            inputRef={inputRef}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            setIsSearching={setIsSearching}
+            searchTasks={searchTasks}
           />
-          <FaSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-450 dark:text-gray-400 w-5 h-5" />
         </div>
 
         {/* Cards List Area */}

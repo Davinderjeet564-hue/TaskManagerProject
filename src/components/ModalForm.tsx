@@ -36,13 +36,14 @@ function ModalForm({
     if (e.key === "Enter") {
       e.preventDefault();
       if (!e.currentTarget.value && titleRef.current) {
-        titleRef.current.placeholder = "Please enter a title";
-        return;
-      }
-    }
-    descriptionRef.current?.focus();
-  };
-
+      titleRef.current.placeholder = "Please enter a title";
+      return;
+    } else if (descriptionRef.current) {
+      descriptionRef.current?.focus();
+    }  
+  }
+  }
+  
   const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
   };
@@ -142,7 +143,7 @@ function ModalForm({
           ref={descriptionRef}
         ></textarea>
 
-        {editingTask && 
+        {editingTask &&
           <div className="flex items-center justify-start gap-2 sm:gap-3 mt-1 sm:mt-2">
             <label
               htmlFor="Completed"
@@ -159,7 +160,7 @@ function ModalForm({
                 onChange={() => completeTask(editingTask.id)}
                 className="peer sr-only"
               />
-              <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-green-500 dark:bg-gray-600"/>
+              <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-green-500 dark:bg-gray-600" />
               <div className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5" />
             </label>
           </div>

@@ -5,10 +5,10 @@ import themeContext from "./themeContext";
 import ModalForm from "./components/ModalForm";
 import AuthModal from "./components/AuthModal";
 import { useAuth } from "./context/AuthContext";
-import { IoMdSearch } from "react-icons/io";
 import ShowAllTasks from "./components/ShowAllTasks";
 import Footer from "./components/Footer";
 import loadStoredTasks from "./loadTasks";
+import SearchBar from "./components/SearchBar";
 
 export interface Task {
   id: string;
@@ -31,8 +31,10 @@ function App() {
   const [searchedTasks, setSearchedTasks] = useState<Task[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [showAllTasks, setShowAllTasks] = useState<boolean>(false);
+
+
 
   // Sync tasks when user changes (login/logout)
   useEffect(() => {
@@ -155,25 +157,12 @@ function App() {
           <Header onOpenAuthModal={() => setIsAuthModalOpen(true)} />
           <div className="flex flex-row justify-end items-center gap-5 mt-4 ">
             <div className="relative w-full max-w-md mx-auto mt-12 px-4">
-              <input
-                type="text"
-                ref={inputRef}
-                className="w-full border border-gray-300 rounded-md p-4 pl-4 pr-12 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-300 focus:outline-hidden dark:bg-gray-700 dark:text-gray-100 dark:focus:border-indigo-300 dark:focus:ring-2 dark:focus:outline-hidden transition-colors duration-300"
-                placeholder="Search Task"
-                value={searchValue}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setSearchValue(value);
-                  setIsSearching(value.length > 0);
-                  searchTasks(value);
-                }}
-              />
-              <IoMdSearch
-                size={24}
-                className="text-gray-500 dark:text-gray-400 absolute right-8 top-1/2 -translate-y-1/2 transition-colors duration-300 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 dark:focus:text-indigo-500"
-                onClick={() => {
-                  inputRef.current?.focus();
-                }}
+              <SearchBar
+                inputRef={inputRef}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                setIsSearching={setIsSearching}
+                searchTasks={searchTasks}
               />
             </div>
           </div>
