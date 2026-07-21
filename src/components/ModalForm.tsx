@@ -35,10 +35,12 @@ function ModalForm({
   const handleTitleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (e.currentTarget.value) {
-        descriptionRef.current?.focus();
+      if (!e.currentTarget.value && titleRef.current) {
+        titleRef.current.placeholder = "Please enter a title";
+        return;
       }
     }
+    descriptionRef.current?.focus();
   };
 
   const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -48,6 +50,10 @@ function ModalForm({
   const handleDescriptionKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+      if (!e.currentTarget.value && descriptionRef.current) {
+        descriptionRef.current.placeholder = "Please enter task details";
+        return;
+      }
       handleSubmit();
     }
   };
@@ -82,7 +88,7 @@ function ModalForm({
           htmlFor="title"
           className="uppercase font-semibold text-sm opacity-70 dark:text-gray-100"
         >
-          Title
+          Task Title
         </label>
         <input
           type="text"
@@ -97,7 +103,7 @@ function ModalForm({
           htmlFor="description"
           className="uppercase font-semibold text-sm opacity-70 dark:text-gray-100"
         >
-          Description
+          Task Details
         </label>
         <textarea
           className={`w-full h-32 p-3 border rounded-lg transition-colors duration-200
