@@ -7,20 +7,14 @@ import AuthModal from "./components/AuthModal";
 import { useAuth } from "./context/AuthContext";
 import ShowAllTasks from "./components/ShowAllTasks";
 import Footer from "./components/Footer";
-import loadStoredTasks from "./loadTasks";
 import SearchBar from "./components/SearchBar";
+import { useTasks, type Task } from "./hooks/useTasks";
 
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  completed: boolean;
-}
+export type { Task };
 
 function App() {
   const { user } = useAuth();
-  const [tasks, setTasks] = useState<Task[]>(() => loadStoredTasks(user?.id));
+  const { tasks, addTask, editTask, deleteTask, completeTask } = useTasks(user?.id);
 
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") || "light",
@@ -34,20 +28,6 @@ function App() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [showAllTasks, setShowAllTasks] = useState<boolean>(false);
 
-
-
-  // Sync tasks when user changes (login/logout)
-  useEffect(() => {
-    setTasks(loadStoredTasks(user?.id));
-  }, [user?.id]);
-
-  // Persist tasks ONLY for authenticated users
-  useEffect(() => {
-    if (user?.id) {
-      localStorage.setItem(`tasks_${user.id}`, JSON.stringify(tasks));
-    }
-  }, [tasks, user?.id]);
-
   useEffect(() => {
     const root = document.documentElement;
     root.style.transition = "all 0.3s ease";
@@ -60,48 +40,8 @@ function App() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const addTask = (title: string, description: string, date: string) => {
-    const newTask: Task = {
-      id: crypto.randomUUID(),
-      title,
-      description,
-      date,
-      completed: false,
-    };
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-  };
-
-  const editTask = (
-    id: string,
-    newTitle: string,
-    newDescription: string,
-    newdate: string,
-  ) => {
-    if (!user) return; // Editing restricted for unauthenticated users
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              title: newTitle,
-              description: newDescription,
-              date: newdate,
-            }
-          : task,
-      ),
-    );
-  };
-
-  const deleteTask = (id: string) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  };
-
-  const completeTask = (id: string) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
-      ),
-    );
+  const handleCompleteTask = (id: string) => {
+    completeTask(id);
     if (editingTask && editingTask.id === id) {
       setEditingTask((prev) => (prev ? { ...prev, completed: !prev.completed } : null));
     }
@@ -144,7 +84,7 @@ function App() {
               searchTasks={searchTasks}
               setEditingTask={setEditingTask}
               deleteTask={deleteTask}
-              completeTask={completeTask}
+              completeTask={handleCompleteTask}
               setIsAddTaskModalOpen={setIsAddTaskModalOpen}
               setShowAllTasks={setShowAllTasks}
               onOpenAuthModal={() => setIsAuthModalOpen(true)}
@@ -179,7 +119,7 @@ function App() {
           </div>
           {isAddTaskModalOpen && (
             <ModalForm
-              completeTask={completeTask}
+              completeTask={handleCompleteTask}
               editingTask={editingTask}
               taskId={editingTask?.id || ""}
               addTask={addTask}
@@ -197,13 +137,13 @@ function App() {
               isSearching={isSearching}
               searchedTasks={searchedTasks}
               deleteTask={deleteTask}
-              completeTask={completeTask}
+              completeTask={handleCompleteTask}
               setIsAddTaskModalOpen={setIsAddTaskModalOpen}
               onOpenAuthModal={() => setIsAuthModalOpen(true)}
             />
           ) : editingTask ? (
             <ModalForm
-              completeTask={completeTask}
+              completeTask={handleCompleteTask}
               editingTask={editingTask}
               taskId={editingTask.id}
               addTask={addTask}
