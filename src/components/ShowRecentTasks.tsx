@@ -2,6 +2,7 @@ import { LuNotebookPen } from "react-icons/lu";
 import type { Task } from "../App";
 import TaskItem from "./TaskItem";
 import { useMemo } from "react";
+import EmptyState from "./EmptyState";
 
 interface ShowRecentTasksProps {
   tasks: Task[];
@@ -58,12 +59,11 @@ function ShowRecentTasks({
               })}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
-              <LuNotebookPen size={48} color="currentColor" className="mb-2 " />
-              <p className="text-gray-500 dark:text-gray-400">
-                No tasks found.
-              </p>
-            </div>
+            <EmptyState
+              message="No tasks found."
+              icon={<LuNotebookPen size={48} color="currentColor" className="mb-2" />}
+              className="mt-0 text-gray-500 dark:text-gray-400"
+            />
           )}
         </div>
       ) : (
@@ -100,15 +100,12 @@ function ShowRecentTasks({
                 );
               })
             ) : (
-              <div className="col-span-full text-center text-gray-500 dark:text-gray-400">
-                <LuNotebookPen
-                  size={48}
-                  color="currentColor"
-                  className="mb-2 "
+              <div className="col-span-full">
+                <EmptyState
+                  message="No tasks found."
+                  icon={<LuNotebookPen size={48} color="currentColor" className="mb-2" />}
+                  className="mt-0 text-gray-500 dark:text-gray-400"
                 />
-                <p className="text-gray-500 dark:text-gray-400">
-                  No tasks found.
-                </p>
               </div>
             )}
           </div>
