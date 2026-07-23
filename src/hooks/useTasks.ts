@@ -27,6 +27,10 @@ export function useTasks(userId?: string) {
   }, [tasks, userId]);
 
   const addTask = (title: string, description: string, date: string) => {
+    if (!userId) {
+      console.warn("addTask rejected: User must be signed in to add tasks.");
+      return;
+    }
     const newTask: Task = {
       id: crypto.randomUUID(),
       title,
@@ -43,7 +47,10 @@ export function useTasks(userId?: string) {
     newDescription: string,
     newdate: string,
   ) => {
-    if (!userId) return; // Editing restricted for unauthenticated users
+    if (!userId) {
+      console.warn("editTask rejected: User must be signed in to edit tasks.");
+      return;
+    }
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id
@@ -59,10 +66,18 @@ export function useTasks(userId?: string) {
   };
 
   const deleteTask = (id: string) => {
+    if (!userId) {
+      console.warn("deleteTask rejected: User must be signed in to delete tasks.");
+      return;
+    }
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
   const completeTask = (id: string) => {
+    if (!userId) {
+      console.warn("completeTask rejected: User must be signed in to complete tasks.");
+      return;
+    }
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task,

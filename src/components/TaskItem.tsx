@@ -3,6 +3,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import formatDate from "../utils/formatDate";
 import { useAuth } from "../context/AuthContext";
+import useRequireAuth from "../hooks/useRequireAuth";
 
 interface TaskItemProps {
   task: Task;
@@ -21,23 +22,27 @@ function TaskItem({
   completeTask,
   index,
   setIsAddTaskModalOpen,
-  onOpenAuthModal,
 }: TaskItemProps) {
   const { user } = useAuth();
+  const requireAuth = useRequireAuth();
   const [timeStr, dateStr] = formatDate(task.date ? new Date(task.date) : new Date()) || ["", ""];
 
   const handleEditClick = (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    if (!user) {
-      if (onOpenAuthModal) {
-        onOpenAuthModal();
-      } else {
-        alert("Task editing is only available for signed-in users. Please sign in to edit tasks.");
-      }
-      return;
-    }
-    setEditingTask(task);
-    setIsAddTaskModalOpen(true);
+    requireAuth(() => {
+      setEditingTask(task);
+      setIsAddTaskModalOpen(true);
+    });
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    requireAuth(() => deleteTask(task.id));
+  };
+
+  const handleCompleteClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    requireAuth(() => completeTask(task.id));
   };
 
   return (
@@ -55,7 +60,7 @@ function TaskItem({
         title="Complete task"
         checked={task.completed}
         aria-label={`Complete task: ${index + 1}`}
-        onChange={() => completeTask(task.id)}
+        onChange={handleCompleteClick}
         className="scale-140 cursor-pointer self-start mt-2.5 accent-indigo-500 dark:accent-indigo-400 transition-colors duration-300"
       />
 
@@ -90,7 +95,7 @@ function TaskItem({
           </button>
 
           <button
-            onClick={() => deleteTask(task.id)}
+            onClick={handleDeleteClick}
             className="border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold p-2 sm:py-2 sm:px-4 rounded-xl cursor-pointer transition-colors duration-300"
             title="Delete Task"
           >

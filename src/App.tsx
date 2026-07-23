@@ -12,18 +12,19 @@ import { useTasks, type Task } from "./hooks/useTasks";
 import PageShell from "./components/PageShell";
 import EmptyState from "./components/EmptyState";
 import { taskContext } from "./hooks/TaskContext";
+import useRequireAuth from "./hooks/useRequireAuth";
 
 export type { Task };
 
 function App() {
-  const { user } = useAuth();
+  const { user, isAuthModalOpen, setIsAuthModalOpen } = useAuth();
+  const requireAuth = useRequireAuth();
   const { tasks, addTask, editTask, deleteTask, completeTask } = useTasks(user?.id);
 
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") || "light",
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchedTasks, setSearchedTasks] = useState<Task[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -42,13 +43,6 @@ function App() {
     }
     localStorage.setItem("theme", theme);
   }, [theme]);
-
-  const handleCompleteTask = (id: string) => {
-    completeTask(id);
-    if (editingTask && editingTask.id === id) {
-      setEditingTask((prev) => (prev ? { ...prev, completed: !prev.completed } : null));
-    }
-  };
 
   const searchTasks = (value: string) => {
     setSearchedTasks(
@@ -77,7 +71,7 @@ function App() {
               onClick={() => setShowAllTasks(false)}
               onOpenAuthModal={() => setIsAuthModalOpen(true)}
             />
-            {isModalOpen && (
+            {user && isModalOpen && (
               <ModalForm
                 editingTask={editingTask}
                 taskId={editingTask?.id || ""}
@@ -117,7 +111,7 @@ function App() {
             <div className="flex flex-row justify-center items-center gap-5 mt-12 mb-8">
               <button
                 onClick={() => {
-                  setIsModalOpen(true);
+                  requireAuth(() => setIsModalOpen(true));
                 }}
                 title="Add Task"
                 className="w-32 text-md mt-4 ml-4 bg-blue-500 hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors"
@@ -125,7 +119,7 @@ function App() {
                 Add Task
               </button>
             </div>
-            {isModalOpen && (
+            {user && isModalOpen && (
               <ModalForm
                 editingTask={editingTask}
                 taskId={editingTask?.id || ""}
@@ -143,7 +137,7 @@ function App() {
                 setIsModalOpen={setIsModalOpen}
                 onOpenAuthModal={() => setIsAuthModalOpen(true)}
               />
-            ) : editingTask ? (
+            ) : user && editingTask ? (
               <ModalForm
                 editingTask={editingTask}
                 taskId={editingTask.id}
