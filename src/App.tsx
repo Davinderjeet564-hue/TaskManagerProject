@@ -22,7 +22,7 @@ function App() {
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") || "light",
   );
-  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchedTasks, setSearchedTasks] = useState<Task[]>([]);
@@ -59,95 +59,95 @@ function App() {
   };
 
   const handleCloseModal = () => {
-    setIsAddTaskModalOpen(false);
+    setIsModalOpen(false);
     setEditingTask(null);
   };
 
   return (
     <themeContext.Provider value={{ theme, setTheme }}>
       <taskContext.Provider value={{ tasks, addTask, editTask, deleteTask, completeTask }}>
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-      />
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+        />
 
-      {showAllTasks ? (
-        <PageShell>
-          <Header
-            onClick={() => setShowAllTasks(false)}
-            onOpenAuthModal={() => setIsAuthModalOpen(true)}
-          />
-          <div className="flex flex-col items-center gap-5 mt-4 px-4 sm:px-6 w-full mx-auto">
-            <ShowAllTasks
-              searchedTasks={searchedTasks}
-              searchValue={searchValue}
-              setSearchValue={setSearchValue}
-              isSearching={isSearching}
-              setIsSearching={setIsSearching}
-              searchTasks={searchTasks}
-              setEditingTask={setEditingTask}
-              setIsAddTaskModalOpen={setIsAddTaskModalOpen}
-              setShowAllTasks={setShowAllTasks}
+        {showAllTasks ? (
+          <PageShell>
+            <Header
+              onClick={() => setShowAllTasks(false)}
               onOpenAuthModal={() => setIsAuthModalOpen(true)}
             />
-            <Footer />
-          </div>
-        </PageShell>
-      ) : (
-        <PageShell>
-          <Header onOpenAuthModal={() => setIsAuthModalOpen(true)} />
-          <div className="flex flex-row justify-end items-center gap-5 mt-4 ">
-            <div className="relative w-full max-w-md mx-auto mt-12 px-4">
-              <SearchBar
-                inputRef={inputRef}
+            <div className="flex flex-col items-center gap-5 mt-4 px-4 sm:px-6 w-full mx-auto">
+              <ShowAllTasks
+                searchedTasks={searchedTasks}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
+                isSearching={isSearching}
                 setIsSearching={setIsSearching}
                 searchTasks={searchTasks}
+                setEditingTask={setEditingTask}
+                setIsAddTaskModalOpen={setIsModalOpen}
+                setShowAllTasks={setShowAllTasks}
+                onOpenAuthModal={() => setIsAuthModalOpen(true)}
               />
+              <Footer />
             </div>
-          </div>
-          <div className="flex flex-row justify-center items-center gap-5 mt-12 mb-8">
-            <button
-              onClick={() => {
-                setIsAddTaskModalOpen(true);
-              }}
-              title="Add Task"
-              className="w-32 text-md mt-4 ml-4 bg-blue-500 hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors"
-            >
-              Add Task
-            </button>
-          </div>
-          {isAddTaskModalOpen && (
-            <ModalForm
-              editingTask={editingTask}
-              taskId={editingTask?.id || ""}
-              handleCloseModal={handleCloseModal}
-            />
-          )}
+          </PageShell>
+        ) : (
+          <PageShell>
+            <Header onOpenAuthModal={() => setIsAuthModalOpen(true)} />
+            <div className="flex flex-row justify-end items-center gap-5 mt-4 ">
+              <div className="relative w-full max-w-md mx-auto mt-12 px-4">
+                <SearchBar
+                  inputRef={inputRef}
+                  searchValue={searchValue}
+                  setSearchValue={setSearchValue}
+                  setIsSearching={setIsSearching}
+                  searchTasks={searchTasks}
+                />
+              </div>
+            </div>
+            <div className="flex flex-row justify-center items-center gap-5 mt-12 mb-8">
+              <button
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+                title="Add Task"
+                className="w-32 text-md mt-4 ml-4 bg-blue-500 hover:bg-blue-700 text-white dark:text-gray-100 font-bold py-2 px-4 rounded-xl cursor-pointer transition-colors"
+              >
+                Add Task
+              </button>
+            </div>
+            {isModalOpen && (
+              <ModalForm
+                editingTask={editingTask}
+                taskId={editingTask?.id || ""}
+                handleCloseModal={handleCloseModal}
+              />
+            )}
 
-          {tasks.length > 0 ? (
-            <ShowRecentTasks
-              setShowAllTasks={setShowAllTasks}
-              searchValue={searchValue}
-              setEditingTask={setEditingTask}
-              isSearching={isSearching}
-              searchedTasks={searchedTasks}
-              setIsAddTaskModalOpen={setIsAddTaskModalOpen}
-              onOpenAuthModal={() => setIsAuthModalOpen(true)}
-            />
-          ) : editingTask ? (
-            <ModalForm
-              editingTask={editingTask}
-              taskId={editingTask.id}
-              handleCloseModal={handleCloseModal}
-            />
-          ) : (
-            <EmptyState />
-          )}
-          <Footer />
-        </PageShell>
-      )}
+            {tasks.length > 0 ? (
+              <ShowRecentTasks
+                setShowAllTasks={setShowAllTasks}
+                searchValue={searchValue}
+                setEditingTask={setEditingTask}
+                isSearching={isSearching}
+                searchedTasks={searchedTasks}
+                setIsModalOpen={setIsModalOpen}
+                onOpenAuthModal={() => setIsAuthModalOpen(true)}
+              />
+            ) : editingTask ? (
+              <ModalForm
+                editingTask={editingTask}
+                taskId={editingTask.id}
+                handleCloseModal={handleCloseModal}
+              />
+            ) : (
+              <EmptyState />
+            )}
+            <Footer />
+          </PageShell>
+        )}
       </taskContext.Provider>
     </themeContext.Provider>
   );

@@ -11,7 +11,7 @@ interface ShowRecentTasksProps {
   isSearching: boolean;
   setEditingTask: (task: Task | null) => void;
   searchedTasks: Task[];
-  setIsAddTaskModalOpen: (value: boolean) => void;
+  setIsModalOpen: (value: boolean) => void;
   onOpenAuthModal?: () => void;
 }
 
@@ -19,7 +19,7 @@ function ShowRecentTasks({
   setShowAllTasks,
   isSearching,
   searchedTasks,
-  setIsAddTaskModalOpen,
+  setIsModalOpen,
   setEditingTask,
   onOpenAuthModal,
 }: ShowRecentTasksProps) {
@@ -44,7 +44,7 @@ function ShowRecentTasks({
                     <TaskItem
                       task={task}
                       setEditingTask={setEditingTask}
-                      setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+                      setIsAddTaskModalOpen={setIsModalOpen}
                       deleteTask={deleteTask}
                       completeTask={completeTask}
                       index={index}
@@ -86,7 +86,7 @@ function ShowRecentTasks({
                     <TaskItem
                       task={task}
                       setEditingTask={setEditingTask}
-                      setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+                      setIsAddTaskModalOpen={setIsModalOpen}
                       deleteTask={deleteTask}
                       completeTask={completeTask}
                       index={index}
