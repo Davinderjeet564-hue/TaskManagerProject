@@ -77,6 +77,13 @@ function App() {
               onClick={() => setShowAllTasks(false)}
               onOpenAuthModal={() => setIsAuthModalOpen(true)}
             />
+            {isModalOpen && (
+              <ModalForm
+                editingTask={editingTask}
+                taskId={editingTask?.id || ""}
+                handleCloseModal={handleCloseModal}
+              />
+            )}
             <div className="flex flex-col items-center gap-5 mt-4 px-4 sm:px-6 w-full mx-auto">
               <ShowAllTasks
                 searchedTasks={searchedTasks}
