@@ -1,24 +1,20 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import type { ChangeEvent, KeyboardEvent, SyntheticEvent } from "react";
 import type { Task } from "../App";
+import { taskContext } from "../hooks/TaskContext";
 
 interface ModalFormProps {
   editingTask: Task | null;
   taskId: string;
-  addTask: (title: string, description: string, date: string) => void;
-  editTask: (id: string, newTitle: string, newDescription: string, newDate: string) => void;
   handleCloseModal: () => void;
-  completeTask: (id: string) => void;
 }
 
 function ModalForm({
   editingTask,
   taskId,
-  completeTask,
-  addTask,
-  editTask,
   handleCloseModal,
 }: ModalFormProps) {
+  const { addTask, editTask, completeTask } = useContext(taskContext);
   const [title, setTitle] = useState(() => (editingTask ? editingTask.title : ""));
   const [description, setDescription] = useState(() => (editingTask ? editingTask.description : ""));
   const titleRef = useRef<HTMLInputElement>(null);

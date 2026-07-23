@@ -1,33 +1,29 @@
 import { LuNotebookPen } from "react-icons/lu";
 import type { Task } from "../App";
 import TaskItem from "./TaskItem";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import EmptyState from "./EmptyState";
+import { taskContext } from "../hooks/TaskContext";
 
 interface ShowRecentTasksProps {
-  tasks: Task[];
   setShowAllTasks: (value: boolean | ((prev: boolean) => boolean)) => void;
   searchValue: string;
   isSearching: boolean;
   setEditingTask: (task: Task | null) => void;
   searchedTasks: Task[];
-  deleteTask: (id: string) => void;
-  completeTask: (id: string) => void;
   setIsAddTaskModalOpen: (value: boolean) => void;
   onOpenAuthModal?: () => void;
 }
 
 function ShowRecentTasks({
-  tasks,
   setShowAllTasks,
   isSearching,
   searchedTasks,
-  deleteTask,
-  completeTask,
   setIsAddTaskModalOpen,
   setEditingTask,
   onOpenAuthModal,
 }: ShowRecentTasksProps) {
+  const { tasks, deleteTask, completeTask } = useContext(taskContext);
   const orderedTasks = useMemo(
     () => [...tasks].toSorted((a, b) => b.date.localeCompare(a.date)),
     [tasks],

@@ -1,12 +1,12 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { LuNotebookPen } from "react-icons/lu";
 import type { Task } from "../App";
 import TaskItem from "./TaskItem";
 import SearchBar from "./SearchBar";
 import EmptyState from "./EmptyState";
+import { taskContext } from "../hooks/TaskContext";
 
 interface ShowAllTasksProps {
-  tasks: Task[];
   searchedTasks: Task[];
   searchValue: string;
   isSearching: boolean;
@@ -14,15 +14,12 @@ interface ShowAllTasksProps {
   setIsSearching: (value: boolean) => void;
   searchTasks: (value: string) => void;
   setEditingTask: (task: Task | null) => void;
-  deleteTask: (id: string) => void;
-  completeTask: (id: string) => void;
   setIsAddTaskModalOpen: (value: boolean) => void;
   setShowAllTasks: (value: boolean) => void;
   onOpenAuthModal?: () => void;
 }
 
 function ShowAllTasks({
-  tasks,
   searchedTasks,
   searchValue,
   setSearchValue,
@@ -30,12 +27,11 @@ function ShowAllTasks({
   setIsSearching,
   searchTasks,
   setEditingTask,
-  deleteTask,
-  completeTask,
   setIsAddTaskModalOpen,
   setShowAllTasks,
   onOpenAuthModal,
 }: ShowAllTasksProps) {
+  const { tasks, deleteTask, completeTask } = useContext(taskContext);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (
