@@ -3,7 +3,7 @@ import type { Task } from "../App";
 import TaskItem from "./TaskItem";
 import { useContext, useMemo } from "react";
 import EmptyState from "./EmptyState";
-import { taskContext } from "../hooks/TaskContext";
+import { taskContext } from "../context/TaskContext";
 
 interface ShowRecentTasksProps {
   setShowAllTasks: (value: boolean | ((prev: boolean) => boolean)) => void;

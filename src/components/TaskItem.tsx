@@ -57,11 +57,14 @@ function TaskItem({
     >
       <input
         type="checkbox"
-        title="Complete task"
+        title={user ? "Complete task" : "Sign in to complete tasks"}
+        disabled={!user}
         checked={task.completed}
         aria-label={`Complete task: ${index + 1}`}
         onChange={handleCompleteClick}
-        className="scale-140 cursor-pointer self-start mt-2.5 accent-indigo-500 dark:accent-indigo-400 transition-colors duration-300"
+        className={`scale-140 self-start mt-2.5 accent-indigo-500 dark:accent-indigo-400 transition-colors duration-300 ${
+          !user ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        }`}
       />
 
       <div
@@ -96,8 +99,13 @@ function TaskItem({
 
           <button
             onClick={handleDeleteClick}
-            className="border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold p-2 sm:py-2 sm:px-4 rounded-xl cursor-pointer transition-colors duration-300"
-            title="Delete Task"
+            disabled={!user}
+            className={`border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold p-2 sm:py-2 sm:px-4 rounded-xl transition-colors duration-300 ${
+              !user
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
+            }`}
+            title={user ? "Delete Task" : "Sign in to delete tasks"}
           >
             <MdDeleteOutline />
           </button>

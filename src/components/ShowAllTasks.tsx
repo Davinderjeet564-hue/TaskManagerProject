@@ -4,7 +4,7 @@ import type { Task } from "../App";
 import TaskItem from "./TaskItem";
 import SearchBar from "./SearchBar";
 import EmptyState from "./EmptyState";
-import { taskContext } from "../hooks/TaskContext";
+import { taskContext } from "../context/TaskContext";
 
 interface ShowAllTasksProps {
   searchedTasks: Task[];

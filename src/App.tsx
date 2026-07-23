@@ -11,7 +11,7 @@ import SearchBar from "./components/SearchBar";
 import { useTasks, type Task } from "./hooks/useTasks";
 import PageShell from "./components/PageShell";
 import EmptyState from "./components/EmptyState";
-import { taskContext } from "./hooks/TaskContext";
+import { taskContext } from "./context/TaskContext";
 import useRequireAuth from "./hooks/useRequireAuth";
 
 export type { Task };

@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import type { ChangeEvent, KeyboardEvent, SyntheticEvent } from "react";
 import type { Task } from "../App";
-import { taskContext } from "../hooks/TaskContext";
+import { taskContext } from "../context/TaskContext";
+import useRequireAuth from "../hooks/useRequireAuth";
 
 interface ModalFormProps {
   editingTask: Task | null;
@@ -15,6 +16,7 @@ function ModalForm({
   handleCloseModal,
 }: ModalFormProps) {
   const { addTask, editTask, completeTask } = useContext(taskContext);
+  const requireAuth = useRequireAuth();
   const [title, setTitle] = useState(() => (editingTask ? editingTask.title : ""));
   const [description, setDescription] = useState(() => (editingTask ? editingTask.description : ""));
   const titleRef = useRef<HTMLInputElement>(null);
@@ -58,18 +60,20 @@ function ModalForm({
   const handleSubmit = (e?: SyntheticEvent<HTMLButtonElement>) => {
     e?.preventDefault();
 
-    if (editingTask) {
+    requireAuth(() => {
+      if (editingTask) {
+        if (!title.trim() || !description.trim()) return;
+
+        editTask(taskId, title, description, new Date().toISOString());
+        handleCloseModal();
+        return;
+      }
+
       if (!title.trim() || !description.trim()) return;
 
-      editTask(taskId, title, description, new Date().toISOString());
+      addTask(title, description, new Date().toISOString());
       handleCloseModal();
-      return;
-    }
-
-    if (!title.trim() || !description.trim()) return;
-
-    addTask(title, description, new Date().toISOString());
-    handleCloseModal();
+    });
   };
 
 
@@ -153,7 +157,7 @@ function ModalForm({
                 type="checkbox"
                 id="Completed"
                 checked={editingTask.completed}
-                onChange={() => completeTask(editingTask.id)}
+                onChange={() => requireAuth(() => completeTask(editingTask.id))}
                 className="peer sr-only"
               />
               <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-green-500 dark:bg-gray-600" />
